@@ -1,18 +1,22 @@
 "use client";
 
-import axios from "axios";
 import * as z from "zod";
+import axios from "axios";
 import qs from "query-string";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useModal } from "@/hooks/use-modal-store";
 import { EmojiPicker } from "@/components/emoji-picker";
-import { useEffect, useState } from "react";
 
 interface ChatInputProps {
   apiUrl: string;
@@ -25,17 +29,20 @@ const formSchema = z.object({
   content: z.string().min(1),
 });
 
-const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
+export const ChatInput = ({
+  apiUrl,
+  query,
+  name,
+  type,
+}: ChatInputProps) => {
   const { onOpen } = useModal();
   const router = useRouter();
-
-  const [shouldRefocus, setShouldRefocus] = useState(true);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       content: "",
-    },
+    }
   });
 
   const isLoading = form.formState.isSubmitting;
@@ -50,27 +57,11 @@ const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
       await axios.post(url, values);
 
       form.reset();
-
-      // After successful submission, trigger refocusing
-      setShouldRefocus(true);
+      router.refresh();
     } catch (error) {
       console.log(error);
     }
-  };
-
-  useEffect(() => {
-    if (shouldRefocus) {
-      // Find the input element using a ref
-      const inputElement = document.querySelector(
-        '[name="content"]'
-      ) as HTMLInputElement;
-
-      if (inputElement) {
-        inputElement.focus();
-        setShouldRefocus(false); // Reset the refocus trigger
-      }
-    }
-  }, [shouldRefocus]);
+  }
 
   return (
     <Form {...form}>
@@ -92,16 +83,12 @@ const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
                   <Input
                     disabled={isLoading}
                     className="px-14 py-6 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
-                    placeholder={`Message ${
-                      type === "conversation" ? name : "#" + name
-                    }`}
+                    placeholder={`Message ${type === "conversation" ? name : "#" + name}`}
                     {...field}
                   />
                   <div className="absolute top-7 right-8">
                     <EmojiPicker
-                      onChange={(emoji: string) =>
-                        field.onChange(`${field.value}${emoji}`)
-                      }
+                      onChange={(emoji: string) => field.onChange(`${field.value} ${emoji}`)}
                     />
                   </div>
                 </div>
@@ -111,7 +98,5 @@ const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
         />
       </form>
     </Form>
-  );
-};
-
-export default ChatInput;
+  )
+}
