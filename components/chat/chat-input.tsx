@@ -12,6 +12,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useModal } from "@/hooks/use-modal-store";
 import { EmojiPicker } from "@/components/emoji-picker";
+import { useEffect, useState } from "react";
 
 interface ChatInputProps {
   apiUrl: string;
@@ -27,6 +28,8 @@ const formSchema = z.object({
 const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
   const { onOpen } = useModal();
   const router = useRouter();
+
+  const [shouldRefocus, setShouldRefocus] = useState(true);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,11 +50,27 @@ const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
       await axios.post(url, values);
 
       form.reset();
-      router.refresh();
+
+      // After successful submission, trigger refocusing
+      setShouldRefocus(true);
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (shouldRefocus) {
+      // Find the input element using a ref
+      const inputElement = document.querySelector(
+        '[name="content"]'
+      ) as HTMLInputElement;
+
+      if (inputElement) {
+        inputElement.focus();
+        setShouldRefocus(false); // Reset the refocus trigger
+      }
+    }
+  }, [shouldRefocus]);
 
   return (
     <Form {...form}>
