@@ -5,6 +5,7 @@ import qs from "query-string";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+
 import {
   Dialog,
   DialogContent,
@@ -18,8 +19,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
@@ -27,10 +26,12 @@ import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
 
 const formSchema = z.object({
-  fileUrl: z.string().min(1, { message: "Attachments is required" }),
+  fileUrl: z.string().min(1, {
+    message: "Attachment is required."
+  })
 });
 
-const MessageFileModal = () => {
+export const MessageFileModal = () => {
   const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
 
@@ -41,13 +42,13 @@ const MessageFileModal = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       fileUrl: "",
-    },
+    }
   });
 
   const handleClose = () => {
     form.reset();
     onClose();
-  };
+  }
 
   const isLoading = form.formState.isSubmitting;
 
@@ -69,7 +70,7 @@ const MessageFileModal = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }
 
   return (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
@@ -79,7 +80,7 @@ const MessageFileModal = () => {
             Add an attachment
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
-            Send a file as a message after uploading it here.
+            Send a file as a message
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -100,7 +101,7 @@ const MessageFileModal = () => {
                       </FormControl>
                     </FormItem>
                   )}
-                ></FormField>
+                />
               </div>
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
@@ -112,7 +113,5 @@ const MessageFileModal = () => {
         </Form>
       </DialogContent>
     </Dialog>
-  );
-};
-
-export default MessageFileModal;
+  )
+}

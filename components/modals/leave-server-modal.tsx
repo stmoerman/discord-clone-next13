@@ -15,7 +15,7 @@ import {
 import { useModal } from "@/hooks/use-modal-store";
 import { Button } from "@/components/ui/button";
 
-const LeaveServerModal = () => {
+export const LeaveServerModal = () => {
   const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
 
@@ -38,7 +38,7 @@ const LeaveServerModal = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -48,26 +48,28 @@ const LeaveServerModal = () => {
             Leave Server
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
-            Are you sure you want to leave{" "}
-            <span className="font-semibold text-indigo-500">
-              {server?.name}
-            </span>
-            ?
+            Are you sure you want to leave <span className="font-semibold text-indigo-500">{server?.name}</span>?
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="bg-gray-100 px-6 py-4">
           <div className="flex items-center justify-between w-full">
-            <Button disabled={isLoading} onClick={onClose} variant="ghost">
+            <Button
+              disabled={isLoading}
+              onClick={onClose}
+              variant="ghost"
+            >
               Cancel
             </Button>
-            <Button disabled={isLoading} onClick={onClick} variant="primary">
+            <Button
+              disabled={isLoading}
+              variant="primary"
+              onClick={onClick}
+            >
               Confirm
             </Button>
           </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
-
-export default LeaveServerModal;
+  )
+}

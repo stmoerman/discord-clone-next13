@@ -2,10 +2,9 @@
 
 import axios from "axios";
 import * as z from "zod";
-import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import {
   Dialog,
@@ -21,18 +20,23 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Server name is required" }),
-  imageUrl: z.string().min(1, { message: "Server image is required" }),
+  name: z.string().min(1, {
+    message: "Server name is required."
+  }),
+  imageUrl: z.string().min(1, {
+    message: "Server image is required."
+  })
 });
 
-const InitialModal = () => {
+export const InitialModal = () => {
   const [isMounted, setIsMounted] = useState(false);
 
   const router = useRouter();
@@ -46,7 +50,7 @@ const InitialModal = () => {
     defaultValues: {
       name: "",
       imageUrl: "",
-    },
+    }
   });
 
   const isLoading = form.formState.isSubmitting;
@@ -61,7 +65,7 @@ const InitialModal = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }
 
   if (!isMounted) {
     return null;
@@ -75,8 +79,7 @@ const InitialModal = () => {
             Customize your server
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
-            Get started by customizing your server with a name and an image. You
-            can always change it later.
+            Give your server a personality with a name and an image. You can always change it later.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -97,7 +100,7 @@ const InitialModal = () => {
                       </FormControl>
                     </FormItem>
                   )}
-                ></FormField>
+                />
               </div>
 
               <FormField
@@ -105,7 +108,9 @@ const InitialModal = () => {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
+                    <FormLabel
+                      className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70"
+                    >
                       Server name
                     </FormLabel>
                     <FormControl>
@@ -130,7 +135,5 @@ const InitialModal = () => {
         </Form>
       </DialogContent>
     </Dialog>
-  );
-};
-
-export default InitialModal;
+  )
+}

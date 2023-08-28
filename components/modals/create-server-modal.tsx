@@ -4,7 +4,6 @@ import axios from "axios";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 
 import {
   Dialog,
@@ -20,19 +19,24 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
+import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Server name is required" }),
-  imageUrl: z.string().min(1, { message: "Server image is required" }),
+  name: z.string().min(1, {
+    message: "Server name is required."
+  }),
+  imageUrl: z.string().min(1, {
+    message: "Server image is required."
+  })
 });
 
-const CreateServerModal = () => {
+export const CreateServerModal = () => {
   const { isOpen, onClose, type } = useModal();
   const router = useRouter();
 
@@ -43,7 +47,7 @@ const CreateServerModal = () => {
     defaultValues: {
       name: "",
       imageUrl: "",
-    },
+    }
   });
 
   const isLoading = form.formState.isSubmitting;
@@ -58,23 +62,22 @@ const CreateServerModal = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }
 
   const handleClose = () => {
     form.reset();
     onClose();
-  };
+  }
 
   return (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
-            Create your Discord server
+            Customize your server
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
-            Get started by customizing your server with a name and an image. You
-            can always change it later.
+            Give your server a personality with a name and an image. You can always change it later.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -95,7 +98,7 @@ const CreateServerModal = () => {
                       </FormControl>
                     </FormItem>
                   )}
-                ></FormField>
+                />
               </div>
 
               <FormField
@@ -103,7 +106,9 @@ const CreateServerModal = () => {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
+                    <FormLabel
+                      className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70"
+                    >
                       Server name
                     </FormLabel>
                     <FormControl>
@@ -128,7 +133,5 @@ const CreateServerModal = () => {
         </Form>
       </DialogContent>
     </Dialog>
-  );
-};
-
-export default CreateServerModal;
+  )
+}

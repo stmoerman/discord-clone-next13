@@ -18,13 +18,13 @@ export async function DELETE(
       where: {
         id: params.serverId,
         profileId: profile.id,
-      },
+      }
     });
 
     return NextResponse.json(server);
   } catch (error) {
     console.log("[SERVER_ID_DELETE]", error);
-    return new NextResponse("Intenal error", { status: 500 });
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }
 
@@ -48,12 +48,12 @@ export async function PATCH(
       data: {
         name,
         imageUrl,
-      },
+      }
     });
 
     return NextResponse.json(server);
   } catch (error) {
     console.log("[SERVER_ID_PATCH]", error);
-    return new NextResponse("Intenal error", { status: 500 });
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }
